@@ -1,0 +1,353 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a>mixin (v0.2.0)</a>
+</h1>
+<h4>Prototypical mixin layer</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.mixin">module mixin</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mixin.mixin">
+            function <span class="apidocSignatureSpan"></span>mixin
+            <span class="apidocSignatureSpan">(base, mixin)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mixin.alias">
+            function <span class="apidocSignatureSpan">mixin.</span>alias
+            <span class="apidocSignatureSpan">(obj, method, suffix, f)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mixin.copyInto">
+            function <span class="apidocSignatureSpan">mixin.</span>copyInto
+            <span class="apidocSignatureSpan">(copy, obj)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mixin.toString">
+            function <span class="apidocSignatureSpan">mixin.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.mixin.alias">module mixin.alias</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mixin.alias.alias">
+            function <span class="apidocSignatureSpan">mixin.</span>alias
+            <span class="apidocSignatureSpan">(obj, method, suffix, f)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.mixin.copyInto">module mixin.copyInto</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mixin.copyInto.copyInto">
+            function <span class="apidocSignatureSpan">mixin.</span>copyInto
+            <span class="apidocSignatureSpan">(copy, obj)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.mixin.toString">module mixin.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.mixin.toString.toString">
+            function <span class="apidocSignatureSpan">mixin.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.mixin" id="apidoc.module.mixin">module mixin</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.mixin.mixin" id="apidoc.element.mixin.mixin">
+        function <span class="apidocSignatureSpan"></span>mixin
+        <span class="apidocSignatureSpan">(base, mixin)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function mixin(base, mixin) {
+  var ctor = base;
+  if (base.constructors) {
+    // Don't mixin the same constructor twice.
+    for (var i in base.constructors) {
+      if (base.constructors[i] === mixin)
+        return base;
+    }
+    // Remember this new one.
+    base.constructors.unshift(mixin);
+  } else {
+    // Remember all mixed in classes
+    base.constructors = [mixin, base];
+    // Create a function with the same name, that calls both functions...
+    ctor = base.prototype.constructor = mixin_constructor(base.name, base);
+    ctor.__proto__ = base;
+  }
+
+  // Inject the mixin prototype at the top of the chain
+  ctor.prototype = insert_proto(base.prototype, mixin.prototype);
+  //inspect_protos(ctor.prototype, "ctor.prototype");
+
+  insert_proto(ctor.__proto__, mixin);
+  //inspect_protos(ctor, "ctor");
+
+  // Inform mixin that it has been included
+  if (mixin.hasOwnProperty('included')) {
+    var incl = mixin.included.call(mixin, ctor);
+    if (incl) { ctor = incl; }
+  }
+
+  return ctor;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.mixin.alias" id="apidoc.element.mixin.alias">
+        function <span class="apidocSignatureSpan">mixin.</span>alias
+        <span class="apidocSignatureSpan">(obj, method, suffix, f)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function alias(obj, method, suffix, f) {
+  if (obj[method + "_without_" + suffix]) {
+    throw(method + "_without_" + suffix + " already defined.");
+  }
+
+  var was = obj[method];
+  obj[method + "_without_" + suffix] = was;
+  obj[method + "_with_" + suffix] = obj[method] = f;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+    Foo.included = function(ctor) {
+        return mixin(ctor, EventEmitter);
+    }
+
+to mix the functionality of EventEmitter into any constructor that mixes in `Foo`.
+
+## mixin.<span class="apidocCodeKeywordSpan">alias</span>(obj, name, suffix, fun)
+
+Can be used to override a method already defined on `obj`. It assigns `fun` to
+`obj[name+'_with_"+suffix]` and reassigns the current value of `obj[name]` to
+`obj[name+'_without_'+suffix]`. Finally it sets `obj[name]` to `fun`.  This is
+similar to Rails' 'alias_method_chain`.
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.mixin.copyInto" id="apidoc.element.mixin.copyInto">
+        function <span class="apidocSignatureSpan">mixin.</span>copyInto
+        <span class="apidocSignatureSpan">(copy, obj)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function copyInto(copy, obj) {
+  var names = Object.getOwnPropertyNames(obj);
+  for (var i in names) {
+    var p = names[i];
+    if (p !== 'prototype') {
+      var descr = Object.getOwnPropertyDescriptor(obj, p);
+      //console.log("obj." + p + " = " + util.inspect(descr));
+      Object.defineProperty(copy, p, descr);
+    }
+  }
+  return copy;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.mixin.toString" id="apidoc.element.mixin.toString">
+        function <span class="apidocSignatureSpan">mixin.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.mixin.alias" id="apidoc.module.mixin.alias">module mixin.alias</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.mixin.alias.alias" id="apidoc.element.mixin.alias.alias">
+        function <span class="apidocSignatureSpan">mixin.</span>alias
+        <span class="apidocSignatureSpan">(obj, method, suffix, f)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function alias(obj, method, suffix, f) {
+  if (obj[method + "_without_" + suffix]) {
+    throw(method + "_without_" + suffix + " already defined.");
+  }
+
+  var was = obj[method];
+  obj[method + "_without_" + suffix] = was;
+  obj[method + "_with_" + suffix] = obj[method] = f;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+    Foo.included = function(ctor) {
+        return mixin(ctor, EventEmitter);
+    }
+
+to mix the functionality of EventEmitter into any constructor that mixes in `Foo`.
+
+## mixin.<span class="apidocCodeKeywordSpan">alias</span>(obj, name, suffix, fun)
+
+Can be used to override a method already defined on `obj`. It assigns `fun` to
+`obj[name+'_with_"+suffix]` and reassigns the current value of `obj[name]` to
+`obj[name+'_without_'+suffix]`. Finally it sets `obj[name]` to `fun`.  This is
+similar to Rails' 'alias_method_chain`.
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.mixin.copyInto" id="apidoc.module.mixin.copyInto">module mixin.copyInto</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.mixin.copyInto.copyInto" id="apidoc.element.mixin.copyInto.copyInto">
+        function <span class="apidocSignatureSpan">mixin.</span>copyInto
+        <span class="apidocSignatureSpan">(copy, obj)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function copyInto(copy, obj) {
+  var names = Object.getOwnPropertyNames(obj);
+  for (var i in names) {
+    var p = names[i];
+    if (p !== 'prototype') {
+      var descr = Object.getOwnPropertyDescriptor(obj, p);
+      //console.log("obj." + p + " = " + util.inspect(descr));
+      Object.defineProperty(copy, p, descr);
+    }
+  }
+  return copy;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.mixin.toString" id="apidoc.module.mixin.toString">module mixin.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.mixin.toString.toString" id="apidoc.element.mixin.toString.toString">
+        function <span class="apidocSignatureSpan">mixin.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
