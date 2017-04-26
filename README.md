@@ -1,4 +1,7 @@
-# api documentation for  mixin (v0.2.0)  [![npm package](https://img.shields.io/npm/v/npmdoc-mixin.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-mixin) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-mixin.svg)](https://travis-ci.org/npmdoc/node-npmdoc-mixin)
+# npmdoc-mixin
+
+#### basic api documentation for  mixin (v0.2.0)  [![npm package](https://img.shields.io/npm/v/npmdoc-mixin.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-mixin) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-mixin.svg)](https://travis-ci.org/npmdoc/node-npmdoc-mixin)
+
 #### Prototypical mixin layer
 
 [![NPM](https://nodei.co/npm/mixin.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/mixin)
@@ -42,7 +45,8 @@
     ],
     "name": "mixin",
     "optionalDependencies": {},
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "bin": {}
 }
 ```
 
